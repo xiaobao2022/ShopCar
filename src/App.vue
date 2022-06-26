@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <MyHeader color="#FFF" title="购物车案例" />
-    <MyGoods />
-    <MyFooter />
+    <MyGoods v-for="item in goodsList" :key="item.id" :goods="item"/>
+    <MyFooter :goodsList="goodsList"/>
   </div>
 </template>
 
@@ -10,6 +10,8 @@
 import MyHeader from '#/MyHeader.vue'
 import MyGoods from '#/MyGoods.vue'
 import MyFooter from '#/MyFooter.vue'
+import axios from 'axios'
+
 export default {
   components: {
     MyHeader,
@@ -30,6 +32,7 @@ export default {
         url: '/api/cart'
       })
       console.log(res)
+      this.goodsList = res.data.list
     }
   }
 }

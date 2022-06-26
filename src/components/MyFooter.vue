@@ -3,23 +3,57 @@
   <div class="my-footer">
     <!-- 全选 -->
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="footerCheck" >
+      <input type="checkbox" class="custom-control-input" id="footerCheck" v-model="isAll">
       <label class="custom-control-label" for="footerCheck">全选</label>
     </div>
     <!-- 合计 -->
     <div>
       <span>合计:</span>
-      <span class="price">¥ </span>
+      <span class="price">¥ {{ allPrice }}</span>
     </div>
     <!-- 按钮 -->
-    <button type="button" class="footer-btn btn btn-primary"></button>
+    <button type="button" class="footer-btn btn btn-primary">{{ allCount }}</button>
   </div>
 </template>
 
 <script>
+
 export default {
- 
- 
+  props: {
+    goodsList: {
+      type: Array,
+      equired: true
+    }
+  },
+  computed: {
+    isAll: {
+      get() {
+        return this.goodsList.every(item => item.goods_state)
+      },
+      set(newval) {
+        console.log(newval)
+        this.goodsList.forEach(item => (item.goods_state = newval))
+      }
+    },
+    allCount() {
+      return this.goodsList.reduce((pre, curr) => {
+        if (curr.goods_state) {
+          return pre + curr.goods_count
+        } else {
+          return pre
+        }
+      }, 0)
+    },
+    allPrice() {
+      return this.goodsList.reduce((pre, curr) => {
+        if (curr.goods_state) {
+          return pre + curr.goods_count * curr.goods_price
+        } else {
+          return pre
+        }
+      }, 0)
+    }
+  }
 }
 </script>
 
